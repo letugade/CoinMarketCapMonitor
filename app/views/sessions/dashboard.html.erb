@@ -1,0 +1,74 @@
+<!-- If this gets taken down then no more beautiful select menu :( -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+<script type = "text/javascript">
+  function test()
+  {
+    var alerted = false;
+    var rtext = <%= @data.html_safe %>;
+    var elements = document.getElementsByClassName("selected");
+    var table = document.getElementById("table");
+    for (var i = 0; i < elements.length; i++)
+    {
+      var repeat = false;
+      for (j = 1; j < table.rows.length; j++)
+      {
+            var row = table.rows.item(j).cells;
+            if (row.item(0).innerHTML == rtext[i]["name"])
+            {
+              repeat = true
+            }
+      }
+      if (repeat == false)
+      {
+        var index = elements[i].getAttribute("data-original-index");
+        var row = table.insertRow(-1);
+        var name = row.insertCell(0);
+        var market_cap = row.insertCell(1);
+        var price = row.insertCell(2);
+        var volume_24h = row.insertCell(3);
+        var circulating_supply = row.insertCell(4);
+        var change_24h = row.insertCell(5);
+        name.innerHTML = rtext[index]["name"];
+        market_cap.innerHTML = "$" + rtext[index]["market_cap_usd"];
+        price.innerHTML = "$" + rtext[index]["price_usd"];
+        volume_24h.innerHTML = "$" + rtext[index]["24h_volume_usd"];
+        circulating_supply.innerHTML = rtext[index]["available_supply"] + " " + rtext[index]["symbol"];
+        change_24h.innerHTML = rtext[index]["percent_change_24h"] + "%";
+        <% @param = capture do %>
+          <%= @param %>
+        <% end %>
+      }
+      else
+      {
+        if (alerted == false)
+        {
+          alert("Any repeats have been excluded")
+        }
+        alerted = true;
+      }
+    }
+    }
+</script>
+<div class="panel panel-default">
+  <!-- Table -->
+  <table class="table" id="table" >
+  <tr>
+    <th>Name</th>
+    <th>Market Cap</th>
+    <th>Price</th>
+    <th>Volume (24h)</th>
+    <th>Circulating Supply</th>
+    <th>Change (24h)</th>
+  </tr>
+  </table>
+</div>
+<select class="selectpicker" id="selector" multiple>
+  <% @rdata.each do |category| %>
+    <option><%= category["name"] %></option>
+  <% end %>
+</select>
+<button type="button" class="btn btn-default" aria-label="Plus" onclick="test();">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</button>
+<footer style="text-align: center;">Thanks to Glyphicons, for the plus button</footer>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CoinMarketCapMonitor</title>
+    <title>CoinMarketCap Monitor</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -9,6 +9,15 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="container">
+      <% if ( (params[:controller] == "sessions") && (params[:action] != "new" && params[:action] != "create" ) ) %>
+        <%= render 'sessions/header' %>
+      <% else %>
+        <%=  render 'main/header' %>
+      <% end %>
+    </div>
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
 </html>
